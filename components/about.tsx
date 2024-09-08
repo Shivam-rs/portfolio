@@ -1,15 +1,30 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import SectionHeading from "./section-heading";
 import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { useActiveSectionContext } from "@/context/active-section-context";
 
 export default function About() {
+  const { ref, inView } = useInView({
+    threshold: 0.9,
+  });
+  const { setActiveSection } = useActiveSectionContext();
+  console.log("About: " + inView);
+  useEffect(() => {
+    if (inView) {
+      setActiveSection("About");
+    }
+  }, [inView, setActiveSection]);
+
   return (
     <motion.section
-      className="max-w-[45rem] text-center leading-8"
+      ref={ref}
+      className="max-w-[45rem] text-center leading-8 scroll-mt-28"
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.175 }}
+      id="about"
     >
       <SectionHeading>About Me</SectionHeading>
       <p className="mb-3">
@@ -18,7 +33,7 @@ export default function About() {
         my undergraduate studies, where I served as the General Secretary of our
         Students' Chapter of the Technical Association. In this role, I started
         developing{" "}
-        <span className="font-semibold">full-stack web applications</span>
+        <span className="font-semibold">full-stack web applications </span>
         as part of workshops and seminars.
       </p>
       <p className="mb-3">
